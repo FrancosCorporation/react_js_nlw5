@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# react_js_nlw5
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Projeto de estudo** — primeiros passos com React (Create React App) durante a Next Level Week 5 da Rocketseat, em junho de 2021.
 
-## Available Scripts
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![React](https://img.shields.io/badge/React-17-61DAFB?style=flat&logo=react&logoColor=black)
+![Licença](https://img.shields.io/badge/licen%C3%A7a-MIT-green)
+![Status](https://img.shields.io/badge/status-projeto%20de%20estudo-blue)
 
-In the project directory, you can run:
+## Sobre
 
-### `yarn start`
+Exercício de fundamentos do React feito durante a NLW 5 (trilha ReactJS). O objetivo era praticar componentização e estado com `useState`, criando um componente de botão reutilizável que mantém um contador próprio. O projeto é enxuto e **não corresponde ao app completo do evento** — é o recorte de estudo que ficou versionado.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Funcionalidades
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Comprovadas pelo código atual:
 
-### `yarn test`
+- Componente `Button` reutilizável que exibe um contador interno e o incrementa a cada clique (`src/Button.js`);
+- Renderização de quatro instâncias do botão com textos e contadores independentes (`src/App.js`);
+- Ponto de entrada padrão do Create React App (`src/index.js` + `public/index.html`).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Stack
 
-### `yarn build`
+- **JavaScript** (sem TypeScript)
+- **React 17** + `react-dom`
+- **Create React App** (`react-scripts` 4.0.3)
+- Dependências padrão de teste do CRA (`@testing-library/*`, `web-vitals`) — não há arquivos de teste versionados
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Como rodar
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Pré-requisito: Node.js com Yarn (existe `yarn.lock` no repositório).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+yarn install
+yarn start
+```
 
-### `yarn eject`
+Abre em `http://localhost:3000`. Outros scripts disponíveis no `package.json`:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+yarn test    # runner de testes do CRA (sem testes versionados)
+yarn build   # build de produção em /build
+yarn eject   # irreversível; não recomendado
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Estrutura do projeto
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```
+.
+├── public/
+│   └── index.html
+├── src/
+│   ├── App.js        # renderiza os botões de exemplo
+│   ├── Button.js     # componente com contador via useState
+│   └── index.js      # bootstrap do ReactDOM
+├── aula.md           # anotações da aula
+└── package.json
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Observações
 
-## Learn More
+- `aula.md` guarda a anotação original da aula (criação do projeto com `npx create-react-app`).
+- Não há testes automatizados versionados apesar das dependências de teste.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Licença
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT — veja [LICENSE](LICENSE).
