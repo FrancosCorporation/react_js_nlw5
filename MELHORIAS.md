@@ -11,7 +11,7 @@
 - [x] **DEVOPS-01:** Node 16 substituído por Node 24 LTS e Docker usa `npm ci` sem fallback.
 - [ ] **TEST-01:** testes automatizados continuam pendentes; o antigo script do CRA foi removido para não indicar falsamente que há testes.
 - [x] **DEVOPS-02:** workflow de lint, build, audit e imagem Docker publicado; execução `ff402001b7fe754018b1b7c2f798b86862bf500b` passou. Integração de testes fica pendente com TEST-01.
-- [x] **DOC-01:** README usa `docker build` e `docker run`, sem depender de Compose.
+- [x] **DOC-01:** README usa `docker build` e `docker run`, sem depender de Compose; a porta local é publicada apenas em `127.0.0.1`.
 - [x] **IMP-01 (implementação):** CRA migrado para Vite e React 19; os quatro contadores mantêm estado independente e incrementam com atualização funcional. O aceite automatizado permanece pendente com TEST-01.
 
 O `npm audit` inicial não rodou porque o repositório tinha apenas `yarn.lock`, e o ambiente não tem o comando `yarn`. Após a migração, o lockfile npm atual foi auditado e passou sem vulnerabilidades.

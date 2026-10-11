@@ -29,7 +29,7 @@ Os arquivos estáticos são gerados em `dist/`. `npm run preview` serve uma pré
 
 ```bash
 docker build -t react-js-nlw5 .
-docker run --rm -p 3000:3000 react-js-nlw5
+docker run --rm -p 127.0.0.1:3000:3000 react-js-nlw5
 ```
 
 Abra <http://localhost:3000>. A imagem compila com Node 24, instala dependências com `npm ci` sem fallback e serve os arquivos como usuário `node`, com healthcheck.
