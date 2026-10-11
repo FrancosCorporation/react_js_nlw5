@@ -1,18 +1,18 @@
 # MELHORIAS — react_js_nlw5
 
-> **Gerado por análise de código em 2026-10-05** · Stack original: CRA (react-scripts 4.0.3) + React 17 — exercício NLW5 (contador com useState)
+> **Diagnóstico original de 2026-10-05** · Stack original: CRA (react-scripts 4.0.3) + React 17 — exercício NLW5 (contador com useState)
 > Branch `master` · Stack atual: Vite 8.3 + React 19.3 · teste automatizado pendente
 >
-> **Este arquivo é um plano de execução.** Cada item tem ID, `arquivo:linha`, mudança exata, critério de aceite e comando de verificação.
+> O diagnóstico abaixo registra o estado original. Para o estado atual, consulte a seção de execução e as notas de cada item.
 
 ## Estado da execução · 2026-10-11
 
 - [x] **SEC-01:** CRA 4 removido e dependências migradas para Vite/React atuais. O lockfile npm final passa em `npm audit --audit-level=high` sem vulnerabilidades.
 - [x] **DEVOPS-01:** Node 16 substituído por Node 24 LTS e Docker usa `npm ci` sem fallback.
-- [ ] **TEST-01:** testes não foram adicionados nem executados nesta tarefa. O antigo script do CRA foi removido para não indicar falsamente que há testes.
-- [ ] **DEVOPS-02:** workflow valida lint, build, audit e imagem Docker; falta a etapa de teste junto com TEST-01.
+- [ ] **TEST-01:** testes automatizados continuam pendentes; o antigo script do CRA foi removido para não indicar falsamente que há testes.
+- [x] **DEVOPS-02:** workflow de lint, build, audit e imagem Docker publicado; execução `ff402001b7fe754018b1b7c2f798b86862bf500b` passou. Integração de testes fica pendente com TEST-01.
 - [x] **DOC-01:** README usa `docker build` e `docker run`, sem depender de Compose.
-- [ ] **IMP-01:** CRA foi migrado para Vite e o contador preserva seu comportamento; a aceitação completa permanece pendente até haver teste automatizado.
+- [x] **IMP-01 (implementação):** CRA migrado para Vite e React 19; os quatro contadores mantêm estado independente e incrementam com atualização funcional. O aceite automatizado permanece pendente com TEST-01.
 
 O `npm audit` inicial não rodou porque o repositório tinha apenas `yarn.lock`, e o ambiente não tem o comando `yarn`. Após a migração, o lockfile npm atual foi auditado e passou sem vulnerabilidades.
 
@@ -27,7 +27,7 @@ O `npm audit` inicial não rodou porque o repositório tinha apenas `yarn.lock`,
 
 ---
 
-## 1. Diagnóstico executivo
+## 1. Diagnóstico executivo original
 
 Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza 4 botões. Sem rede, sem API, sem assets além dos padrões do CRA.
 
@@ -36,11 +36,11 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 | Item | Evidência |
 |---|---|
 | README honesto (diz "não é o app completo") | `README.md` |
-| Componente autocontestado (contador local) | `src/Button.js:5-8` |
+| Componente autocontestado (contador local) | `src/Button.jsx` |
 | Dockerfile multi-stage com serve | `Dockerfile` |
 | yarn.lock versionado | raiz |
 
-**O que está quebrado:**
+**Defeitos encontrados naquela análise:**
 
 1. **README manda `docker compose up --build` mas não existe `docker-compose.yml`** no repo (só `Dockerfile`) — instrução inicial falha.
 2. **Build em `node:16-alpine` (EOL)** + `RUN npm ci || npm install` mascarando lockfile (`Dockerfile`).
@@ -55,16 +55,18 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 |---|---|---|---|---|
 | DOC-01 | README: `docker compose up` sem compose no repo | **P1** | `README.md` | — |
 | DEVOPS-01 | Build em node:16 EOL + `npm ci || npm install` | **P1** | `Dockerfile` | — |
-| TEST-01 | Script de teste sem arquivos de teste | **P1** | `package.json` | — |
+| TEST-01 | Sem cobertura automatizada | **P1** | `src/`, `package.json` | — |
 | SEC-01 | react-scripts 4.0.3 sem manutenção (npm audit) | **P2** | `package.json` | — |
-| DEVOPS-02 | Sem CI | **P2** | *(ausente)* `.github/workflows/` | TEST-01 |
-| IMP-01 | CRA → Vite (estratégia de portfólio) | **P3** | `package.json` | TEST-01 |
+| DEVOPS-02 | CI sem testes automatizados | **P2** | `.github/workflows/ci.yml` | TEST-01 |
+| IMP-01 | CRA → Vite (estratégia de portfólio) | **P3** | `package.json` | — (cobertura complementar: TEST-01) |
 
 ---
 
 ## 3. Segurança
 
 ### SEC-01 · react-scripts 4.0.3 sem manutenção · [P2]
+
+- **Estado atual:** concluído; CRA foi removido, o lockfile npm foi auditado sem vulnerabilidades de alta severidade e a CI mantém a auditoria ativa.
 
 - **Arquivo:** `package.json`
 - **Evidência:** `"react-scripts": "^4.0.1"` (resolve 4.0.3, 2021). A cadeia CRA4 (webpack-dev-server <4, postcss antigo) tem advisories públicos acumulados; Dependabot marca sem correção upstream (CRA está em manutenção mínima).
@@ -86,12 +88,12 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 
 ## 5. Qualidade: testes
 
-### TEST-01 · `react-scripts test` sem nenhum arquivo de teste · [P1]
+### TEST-01 · Sem cobertura automatizada do contador · [P1]
 
-- **Arquivo:** `package.json` (`"test": "react-scripts test"`), `src/` (sem `*.test.*`)
-- **Evidência:** `ls src/` = App.js, Button.js, index.js — zero testes; o script entra em watch e não falha por ausência.
-- **Impacto:** falso verde — CI futuro "passaria" sem testar nada; regressão do `Button` (ex.: `setCounter(counter+1)` em lote — clássico do React 17) passaria.
-- **Mudança:** criar `src/Button.test.js`: render, clique incrementa `1→2`, quatro botões independentes (clique num não muda outro). Desligar watch em CI (`--watchAll=false`).
+- **Arquivo:** `src/Button.jsx`, `src/App.jsx`, `package.json`
+- **Evidência atual:** não há arquivos `*.test.*` nem script de teste; a CI não declara aprovação automatizada do comportamento.
+- **Impacto:** regressões no incremento ou no isolamento entre os quatro contadores podem passar pela CI.
+- **Mudança pendente:** criar testes para renderização, incremento e independência dos contadores; adicionar um script `npm test` não interativo e incluí-lo na CI.
 - **Aceite:** `npm test` executa ≥ 3 asserções e falha se o incremento quebrar.
 - **Verificação:**
   ```bash
@@ -103,6 +105,8 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 ## 6. DevOps / Infra
 
 ### DEVOPS-01 · Build em node:16 EOL + fallback `npm install` · [P1]
+
+- **Estado atual:** concluído; os estágios usam Node 24 e o build instala dependências somente com `npm ci`.
 
 - **Arquivo:** `Dockerfile`
 - **Evidência:**
@@ -119,13 +123,12 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
   grep -n 'FROM node:\|npm install' Dockerfile
   ```
 
-### DEVOPS-02 · Sem CI · [P2]
+### DEVOPS-02 · CI sem testes automatizados · [P2]
 
-- **Arquivo:** *(ausente)* `.github/workflows/`
-- **Evidência:** nenhum workflow; sem `.github/`.
-- **Impacto:** `TEST-01` não teria onde rodar; build Docker não é exercitado por PR.
-- **Mudança:** workflow: `CI=true npm test` + `npm run build` (+ `docker build` opcional).
-- **Aceite:** PR quebrado bloqueado.
+- **Arquivo:** `.github/workflows/ci.yml`
+- **Evidência atual:** workflow executa `npm ci`, lint, build, audit e `docker build`; execução remota para `ff402001b7fe754018b1b7c2f798b86862bf500b` concluída com sucesso.
+- **Pendente:** adicionar a etapa `npm test` quando TEST-01 tiver testes reais.
+- **Aceite atual:** lint, build, audit e imagem Docker são verificados em push e pull request para `master`; aceite de testes depende de TEST-01.
 - **Verificação:**
   ```bash
   ls .github/workflows/
@@ -152,8 +155,9 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 - **Arquivo:** `package.json`
 - **Evidência:** CRA4 sem manutenção real; app tem 3 arquivos — migração é **pequena**.
 - **Impacto:** dívida só cresce se o portfólio for mantido vivo.
-- **Mudança:** `npm create vite@latest` + copiar `src/`, ajustar `index.html` (raiz), remover react-scripts; manter testes via Vitest (compatível com o `TEST-01`).
-- **Aceite:** `npm run dev/build/test` no Vite, app idêntico.
+- **Estado atual:** CRA removido, `index.html` e componentes adaptados ao Vite e React atualizado. A aplicação preserva quatro contadores independentes; `npm run lint` e `npm run build` passam na CI.
+- **Validação complementar:** a cobertura automatizada da interação depende de TEST-01.
+- **Aceite:** `npm run dev`/`npm run build` no Vite, app com os quatro contadores independentes; cobertura automatizada fica registrada em TEST-01.
 - **Verificação:**
   ```bash
   grep -c 'react-scripts' package.json   # 0 após migração
@@ -163,19 +167,16 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 
 ## 8. Ordem de execução (waves)
 
-### Wave 1 — Funciona/infra (P1)
-1. **`DOC-01`** — README verdadeiro (desbloqueia onboarding).
-2. **`DEVOPS-01`** — node:24 + `npm ci`.
-3. **`TEST-01`** — 3 testes do Button.
+### Itens concluídos
 
-### Wave 2 — Qualidade (P2)
-4. **`SEC-01`** — auditar e registrar.
-5. **`DEVOPS-02`** — CI (roda o teste novo).
+`DOC-01`, `DEVOPS-01`, `SEC-01` e a migração `IMP-01` estão implementados. O workflow de `DEVOPS-02` já valida lint, build, audit e a imagem Docker.
 
-### Wave 3 — Estratégia (P3)
-6. **`IMP-01`** — Vite (depois dos testes — são a rede de segurança).
+### Pendência
 
-**Dependências:** `DEVOPS-02` depois de `TEST-01` · `IMP-01` depois de `TEST-01`+`DEVOPS-02`.
+1. **`TEST-01`** — adicionar testes para renderização, incremento e independência dos contadores.
+2. **`DEVOPS-02`** — incluir `npm test` na CI depois de TEST-01.
+
+**Dependências atuais:** incluir testes na CI depende de TEST-01. A migração IMP-01 já foi implementada; TEST-01 complementa sua validação.
 
 ---
 
@@ -187,7 +188,7 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 | Adicionar router/estado global | **Não** | Exercício de useState; inflar destrói o propósito didático. |
 | Subir dev server exposto na rede | **Não** | CRA dev server sem HTTPS — manter localhost. |
 
-**Riscos:** `IMP-01` pode quebrar paths do CRA (`PUBLIC_URL`) — app é mínimo, risco baixo.
+**Risco pendente:** sem TEST-01, mudanças futuras ainda podem regredir o incremento ou o isolamento dos contadores sem falhar na CI.
 
 ---
 
@@ -196,20 +197,17 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 **Doc/infra**
 - [x] `DOC-01` — comando do README sobe o app
 - [x] `DEVOPS-01` — node:24 + `npm ci` puro
-- [ ] `DEVOPS-02` — CI com teste+build
+- [x] `DEVOPS-02` — CI de lint, build, audit e Docker; execução remota verde
+- [ ] `DEVOPS-02` — integrar testes automatizados após TEST-01
 
 **Qualidade**
 - [ ] `TEST-01` — ≥ 3 asserções do Button
 - [x] `SEC-01` — CRA substituído e audit npm zerado
-- [ ] `IMP-01` — (opcional) Vite
+- [x] `IMP-01` — CRA migrado para Vite; comportamento preservado
 
 **Validação final:**
-```bash
-CI=true npm test 2>&1 | tail -3
-grep -n 'FROM node:' Dockerfile
-grep -n 'docker' README.md
-```
+O CI atual executa lint, build, audit e `docker build`. Quando TEST-01 for implementado, adicionar e validar `npm test` na workflow.
 
 ---
 
-*Fim do plano. Gerado por leitura direta do código em 2026-10-05. Nenhum item já estava corrigido — todos apontam para defeitos ainda presentes.*
+*Fim do plano. O diagnóstico inicial foi feito em 2026-10-05; o estado de execução foi atualizado em 2026-10-11.*
