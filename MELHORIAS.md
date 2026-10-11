@@ -11,7 +11,7 @@
 - [x] **DEVOPS-01:** Node 16 substituído por Node 24 LTS e Docker usa `npm ci` sem fallback.
 - [ ] **TEST-01:** testes automatizados continuam pendentes; o antigo script do CRA foi removido para não indicar falsamente que há testes.
 - [x] **DEVOPS-02:** workflow de lint, build, audit e imagem Docker publicado; execução `ff402001b7fe754018b1b7c2f798b86862bf500b` passou. Integração de testes fica pendente com TEST-01.
-- [ ] **DEVOPS-03:** CI atualizada para `actions/checkout@v7` e `actions/setup-node@v7` (runtime Node 24), com Ubuntu 24.04 fixo; aguardando a execução remota desta alteração.
+- [x] **DEVOPS-03:** CI usa `actions/checkout@v7` e `actions/setup-node@v7` (runtime Node 24) e fixa Ubuntu 24.04; execução remota `38185484868` passou.
 - [x] **DOC-01:** README usa `docker build` e `docker run`, sem depender de Compose; a porta local é publicada apenas em `127.0.0.1`.
 - [x] **IMP-01 (implementação):** CRA migrado para Vite e React 19; os quatro contadores mantêm estado independente e incrementam com atualização funcional. O aceite automatizado permanece pendente com TEST-01.
 
@@ -141,7 +141,7 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 - **Evidência:** a execução `38185351292` passou, mas registrou que `actions/checkout@v4` e `actions/setup-node@v4` ainda executavam Node 20, forçado para Node 24. O aviso da plataforma indicou a migração de `ubuntu-latest` para Ubuntu 26 a partir de 2026-10-19.
 - **Mudança:** atualizar para `actions/checkout@v7` e `actions/setup-node@v7`, ambas com runtime `node24`, e fixar `runs-on: ubuntu-24.04`.
 - **Aceite:** o workflow executa lint, build, audit e Docker sem os avisos de runtime legado ou migração de imagem; não executa testes enquanto TEST-01 permanecer pendente.
-- **Verificação:** metadados oficiais das duas actions confirmam `using: node24`; CI remota após a mudança.
+- **Verificação:** metadados oficiais das duas actions confirmam `using: node24`; CI `38185484868` passou em checkout, setup Node, lint, build, audit e Docker, sem executar testes.
 
 ---
 
@@ -178,7 +178,7 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 
 ### Itens concluídos
 
-`DOC-01`, `DEVOPS-01`, `SEC-01` e a migração `IMP-01` estão implementados. O workflow de `DEVOPS-02` valida lint, build, audit e a imagem Docker. A alteração de `DEVOPS-03` aguarda a verificação remota.
+`DOC-01`, `DEVOPS-01`, `SEC-01`, `DEVOPS-03` e a migração `IMP-01` estão implementados. O workflow valida lint, build, audit e a imagem Docker; `TEST-01` continua pendente.
 
 ### Pendência
 
@@ -207,7 +207,7 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 - [x] `DOC-01` — comando do README sobe o app
 - [x] `DEVOPS-01` — node:24 + `npm ci` puro
 - [x] `DEVOPS-02` — CI de lint, build, audit e Docker; execução remota verde
-- [ ] `DEVOPS-03` — actions Node 24 e runner Ubuntu 24.04 fixo; aguardando CI remota
+- [x] `DEVOPS-03` — actions Node 24 e runner Ubuntu 24.04 fixo; CI remota verde
 - [ ] `DEVOPS-02` — integrar testes automatizados após TEST-01
 
 **Qualidade**
