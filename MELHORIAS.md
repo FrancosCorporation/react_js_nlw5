@@ -1,9 +1,20 @@
 # MELHORIAS — react_js_nlw5
 
-> **Gerado por análise de código em 2026-10-05** · Stack: CRA (react-scripts 4.0.3) + React 17 — exercício NLW5 (contador com useState)
-> Branch `main` · 3 arquivos em src/ (App, Button, index) · script de teste sem arquivos · sem CI
+> **Gerado por análise de código em 2026-10-05** · Stack original: CRA (react-scripts 4.0.3) + React 17 — exercício NLW5 (contador com useState)
+> Branch `master` · Stack atual: Vite 8.3 + React 19.3 · teste automatizado pendente
 >
 > **Este arquivo é um plano de execução.** Cada item tem ID, `arquivo:linha`, mudança exata, critério de aceite e comando de verificação.
+
+## Estado da execução · 2026-10-11
+
+- [x] **SEC-01:** CRA 4 removido e dependências migradas para Vite/React atuais. O lockfile npm final passa em `npm audit --audit-level=high` sem vulnerabilidades.
+- [x] **DEVOPS-01:** Node 16 substituído por Node 24 LTS e Docker usa `npm ci` sem fallback.
+- [ ] **TEST-01:** testes não foram adicionados nem executados nesta tarefa. O antigo script do CRA foi removido para não indicar falsamente que há testes.
+- [ ] **DEVOPS-02:** workflow valida lint, build, audit e imagem Docker; falta a etapa de teste junto com TEST-01.
+- [x] **DOC-01:** README usa `docker build` e `docker run`, sem depender de Compose.
+- [ ] **IMP-01:** CRA foi migrado para Vite e o contador preserva seu comportamento; a aceitação completa permanece pendente até haver teste automatizado.
+
+O `npm audit` inicial não rodou porque o repositório tinha apenas `yarn.lock`, e o ambiente não tem o comando `yarn`. Após a migração, o lockfile npm atual foi auditado e passou sem vulnerabilidades.
 
 ---
 
@@ -101,7 +112,7 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
   ```
   Estágio de build em runtime sem patches; `|| npm install` entrega árvore não-auditada quando o lock diverge.
 - **Impacto:** imagem de build com CVEs conhecidos; builds não reproduzíveis.
-- **Mudança:** `FROM node:20-alpine AS build` (alinhado ao estágio serve) e `RUN npm ci` puro.
+- **Mudança:** `FROM node:24-alpine AS build` e `RUN npm ci` puro.
 - **Aceite:** build falha com lock errado; `docker build` verde com lock certo.
 - **Verificação:**
   ```bash
@@ -154,7 +165,7 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 
 ### Wave 1 — Funciona/infra (P1)
 1. **`DOC-01`** — README verdadeiro (desbloqueia onboarding).
-2. **`DEVOPS-01`** — node:20 + `npm ci`.
+2. **`DEVOPS-01`** — node:24 + `npm ci`.
 3. **`TEST-01`** — 3 testes do Button.
 
 ### Wave 2 — Qualidade (P2)
@@ -183,13 +194,13 @@ Exercício da NLW5: `Button` com contador próprio (`useState`), `App` renderiza
 ## 10. Definição de pronto (DoD)
 
 **Doc/infra**
-- [ ] `DOC-01` — comando do README sobe o app
-- [ ] `DEVOPS-01` — node:20 + `npm ci` puro
+- [x] `DOC-01` — comando do README sobe o app
+- [x] `DEVOPS-01` — node:24 + `npm ci` puro
 - [ ] `DEVOPS-02` — CI com teste+build
 
 **Qualidade**
 - [ ] `TEST-01` — ≥ 3 asserções do Button
-- [ ] `SEC-01` — audit revisado
+- [x] `SEC-01` — CRA substituído e audit npm zerado
 - [ ] `IMP-01` — (opcional) Vite
 
 **Validação final:**
